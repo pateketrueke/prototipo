@@ -27,7 +27,7 @@ Prototipo::method('replace', function($subject, $with)
 });
 
 
-function Ä($value)
+function RegExp($value)
 {
   return Prototipo::set(func_get_args());
 }
@@ -38,10 +38,10 @@ function Ä($value)
 <pre><?php
 
 
-var_dump(Ä('/b/')->exec('abc'));
-var_dump(Ä('/^B/')->exec('bar'));
-var_dump(Ä('/\w/')->matches('buzz'));
-var_dump(Ä('/a/i')->replace('A@A', '#'));
+var_dump(RegExp('/b/')->exec('abc'));
+var_dump(RegExp('/^B/')->exec('bar'));
+var_dump(RegExp('/\w/')->matches('buzz'));
+var_dump(RegExp('/a/i')->replace('A@A', '#'));
 
 
 ?></pre>

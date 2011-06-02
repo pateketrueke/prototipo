@@ -31,7 +31,7 @@ Prototipo::method('days', function()
 
 
 
-function º($value)
+function in($value)
 {
   return Prototipo::set(func_get_args());
 }
@@ -42,13 +42,13 @@ function º($value)
 <pre><?php
 
 
-º(4)->times(function()
+in(4)->times(function()
 {
   echo "A\n";
 });
 
-var_dump(º(3)->hours());
-var_dump(º(14)->days());
+var_dump(in(3)->hours());
+var_dump(in(14)->days());
 
 
 ?></pre>
