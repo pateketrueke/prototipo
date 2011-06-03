@@ -5,35 +5,30 @@ ini_set('display_errors', 1);
 
 require_once '../library/prototipo.php';
 
+class Str extends Prototipo {}
 
-
-// replace method
-Prototipo::method('replace', function($from, $to)
+Str::method('replace', function($self, $from, $to)
 {
-  Prototipo::set(array_map(function($string) use($from, $to)
+  $self->set(array_map(function($string) use($from, $to)
   {
     return str_replace($from, $to, $string);
-  }, Prototipo::get()));
+  }, $self->get()));
 });
 
-// lower method
-Prototipo::method('lower', function()
+Str::method('lower', function($self)
 {
-  Prototipo::set(array_map('strtolower', Prototipo::get()));
+  $self->set(array_map('strtolower', $self->get()));
 });
 
-// val method
-Prototipo::method('val', function($glue = '')
+Str::method('val', function($self, $glue = '')
 {
-  return join($glue, Prototipo::get());
+  return join($glue, $self->get());
 });
 
 
-
-
-function str()
+function Str()
 {
-  return Prototipo::set(func_get_args());
+  return new Str(func_get_args());
 }
 
 
@@ -42,7 +37,7 @@ function str()
 <pre><?php
 
 
-$var = str('Hello', 'World!');
+$var = Str('Hello', 'World!');
 
 $var->replace('Hello', 'Yellow');
 $var->lower()->replace('yellow', 'bye');

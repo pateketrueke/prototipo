@@ -5,31 +5,32 @@ ini_set('display_errors', 1);
 
 require_once '../library/prototipo.php';
 
+class RegExp extends Prototipo {}
 
 
-// exec method
-Prototipo::method('exec', function($subject)
+
+RegExp::method('exec', function($self, $subject)
 {
-  return preg_match(array_shift(Prototipo::get()), $subject);
+  return preg_match(array_shift($self->get()), $subject);
 });
 
-// match method
-Prototipo::method('matches', function($subject)
+
+RegExp::method('matches', function($self, $subject)
 {
-  preg_match_all(array_shift(Prototipo::get()), $subject, $output);
+  preg_match_all(array_shift($self->get()), $subject, $output);
   return $output;
 });
 
-// replace method
-Prototipo::method('replace', function($subject, $with)
+
+RegExp::method('replace', function($self, $subject, $with)
 {
-  return preg_replace(array_shift(Prototipo::get()), $with, $subject);
+  return preg_replace(array_shift($self->get()), $with, $subject);
 });
 
 
 function RegExp($value)
 {
-  return Prototipo::set(func_get_args());
+  return new RegExp(func_get_args());
 }
 
 

@@ -5,7 +5,7 @@
  * Easily can be used through our scripts to achieve some extra
  * functionality against classical object inheritance
  */
- 
+
 /**
  * Prototypal class
  */
@@ -13,24 +13,20 @@ class Prototipo {
   /**#@+
    * @ignore
    */
-  // singleton
-  private static $_this = NULL;
-  
   // arguments
-  private static $_args = array();
+  private $_args = array();
 
-  // function stack
-  private static $_stack = array();
+  // private function stack
+  private $_private = array();
+
+  // public function stack
+  private static $_public = array();
 
 
-  // avoid constructor
-  private function __construct()
+  // constructor
+  public function __construct($arguments = array())
   {
-  }
-
-  // avoid clonation
-  private function __clone()
-  {
+    $this->set($arguments);
   }
 
   // dynamic calls
@@ -40,6 +36,7 @@ class Prototipo {
     {
       if (is_callable($property))
       {
+        array_unshift($arguments, $this);
         if (($output = call_user_func_array($property, $arguments)) !== NULL)
         {
           return $output;
@@ -54,32 +51,50 @@ class Prototipo {
     return $this;
   }
 
-  // static calls
+  // public method callback
   public static function __callStatic($method, $arguments = array())
   {
-    return self::instance()->__call($method, $arguments);
+    if (isset(self::$_public[get_called_class()][$name]))
+    {
+      if (is_callable(self::$_public[get_called_class()][$name]))
+      {
+        call_user_func_array(self::$_public[get_called_class()][$name], $arguments);
+      }
+    }
   }
 
-  // properties setter
+  // private method setter
   public function __set($key, $value = NULL)
   {
-    self::$_stack[$key] = $value;
+    $this->_private[$key] = $value;
   }
 
   // properties getter
   public function __get($key)
   {
-    if ( ! isset(self::$_stack[$key]))
+    if (isset($this->_private[$key]))
     {
-      trigger_error(sprintf('%s method or property `%s` unavailable', get_called_class(), $key), E_USER_ERROR);
+      $property = $this->_private[$key];
     }
-    return self::$_stack[$key];
+    elseif (isset(self::$_public[get_called_class()][$key]))
+    {
+      $property = self::$_public[get_called_class()][$key];
+    }
+    elseif (isset($this->$key))
+    {
+      $property = $this->$key;
+    }
+    else
+    {
+      trigger_error(sprintf('%s method `%s` unavailable', get_called_class(), $key), E_USER_ERROR);
+    }
+    return $property;
   }
-  
+
   // raw output
   public function __toString()
   {
-    return print_r(self::get(), TRUE);
+    return print_r($this->get(), TRUE);
   }
   /**#@-*/
 
@@ -97,40 +112,29 @@ class Prototipo {
     {
       trigger_error(sprintf('%s method `%s` must be callable', get_called_class(), $name), E_USER_ERROR);
     }
-    self::instance()->$name = $lambda;
-    return self::instance();
-  }
-  
-  /**
-   * Single instance from object
-   *
-   * @return Prototipo
-   */
-  public static function instance()
-  {
-    return is_null(self::$_this) ? self::$_this = new self : self::$_this;
+    self::$_public[get_called_class()][$name] = $lambda;
   }
 
   /**
-   * Asign arguments quietly
+   * Assign arguments quietly
    *
    * @param  array     $arguments Array of arguments
    * @return Prototipo
    */
-  public static function set($arguments)
+  public function set($arguments)
   {
-    self::$_args = (array) $arguments;
-    return self::instance();
+    $this->_args = (array) $arguments;
+    return $this;
   }
-  
+
   /**
    * Returns the cached arguments
    *
    * @return array
    */
-  public static function get()
+  public function get()
   {
-    return self::$_args;
+    return $this->_args;
   }
 }
 

@@ -5,32 +5,33 @@ ini_set('display_errors', 1);
 
 require_once '../library/prototipo.php';
 
+class Arr extends Prototipo {}
 
 
-// map method
-Prototipo::method('map', function($lambda)
+
+Arr::method('map', function($self, $lambda)
 {
-  foreach ($test = array_shift(Prototipo::get()) as $key => $value)
+  foreach ($test = array_shift($self->get()) as $key => $value)
   {
     $test[$key] = call_user_func($lambda, $value);
   }
   return $test;
 });
 
-// each method
-Prototipo::method('each', function($lambda)
+
+Arr::method('each', function($self, $lambda)
 {
-  foreach ($test = array_shift(Prototipo::get()) as $key => $value)
+  foreach ($test = array_shift($self->get()) as $key => $value)
   {
     call_user_func($lambda, $key, $value);
   }
 });
 
-// collect method
-Prototipo::method('collect', function($lambda)
+
+Arr::method('collect', function($self, $lambda)
 {
   $output = array();
-  foreach ($test = array_shift(Prototipo::get()) as $key => $value)
+  foreach ($test = array_shift($self->get()) as $key => $value)
   {
     if (call_user_func($lambda, $key, $value) === TRUE)
     {
@@ -46,13 +47,13 @@ Prototipo::method('collect', function($lambda)
 // with wrapper
 function with()
 {
-  return Prototipo::set(func_get_args());
+  return new Arr(func_get_args());
 }
 
 // iterate shortcode
 function iterate($on, $lambda)
 {
-  Prototipo::set(array($on))->each($lambda);
+  with($on)->each($lambda);
 }
 
 ?>

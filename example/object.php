@@ -5,18 +5,17 @@ ini_set('display_errors', 1);
 
 require_once '../library/prototipo.php';
 
+class Obj extends Prototipo {}
 
 
-// factory instance
-$var = Prototipo::instance();
 
+$var = new Obj;
 
-// extend method
-$var->extend = function($prototype) use($var)
+$var->extend = function($self, $prototype)
 {
   foreach ($prototype as $name => $lambda)
   {
-    $var->$name = $lambda;
+    $self->$name = $lambda;
   }
 };
 
@@ -24,17 +23,17 @@ $var->extend = function($prototype) use($var)
 
 // various methods
 $var->extend(array(
-  'begin' => function() use($var)
+  'begin' => function($self)
   {
-    $var->say('This begins...');
+    $self->say('This begins...');
   },
-  'say' => function($str)
+  'say' => function($self, $str)
   {
     echo "$str\n";
   },
-  'end' => function() use($var)
+  'end' => function($self)
   {
-    $var->say('...then ends.');
+    $self->say('...then ends.');
   },
 ));
 
@@ -48,7 +47,6 @@ $var->begin()
     ->end();
 
 var_dump($var);
-var_dump(Prototipo::instance());
 
 
 ?></pre>
