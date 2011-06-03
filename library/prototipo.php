@@ -54,13 +54,11 @@ class Prototipo {
   // public method callback
   public static function __callStatic($method, $arguments = array())
   {
-    if (isset(self::$_public[get_called_class()][$name]))
+    if ( ! isset(self::$_public[get_called_class()][$name]))
     {
-      if (is_callable(self::$_public[get_called_class()][$name]))
-      {
-        call_user_func_array(self::$_public[get_called_class()][$name], $arguments);
-      }
+      trigger_error(sprintf('%s method `%s` unavailable', get_called_class(), $key), E_USER_ERROR);
     }
+    call_user_func_array(self::$_public[get_called_class()][$name], $arguments);
   }
 
   // private method setter
