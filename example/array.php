@@ -47,7 +47,8 @@ Arr::method('collect', function($self, $lambda)
 // with wrapper
 function with()
 {
-  return new Arr(func_get_args());
+  $obj = new Arr;
+  return $obj->set(func_get_args());
 }
 
 // iterate shortcode

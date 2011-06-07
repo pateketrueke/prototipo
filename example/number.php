@@ -34,7 +34,8 @@ Num::method('days', function($self)
 
 function Num($value)
 {
-  return new Num(func_get_args());
+  $obj = new Num;
+  return $obj->set(func_get_args());
 }
 
 

@@ -28,7 +28,8 @@ Str::method('val', function($self, $glue = '')
 
 function Str()
 {
-  return new Str(func_get_args());
+  $obj = new Str;
+  return $obj->set(func_get_args());
 }
 
 

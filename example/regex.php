@@ -30,7 +30,8 @@ RegExp::method('replace', function($self, $subject, $with)
 
 function RegExp($value)
 {
-  return new RegExp(func_get_args());
+  $obj = new RegExp;
+  return $obj->set(func_get_args());
 }
 
 

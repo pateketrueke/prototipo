@@ -57,11 +57,6 @@ var_dump($var->candy);
 var_dump($var->foo());
 
 $var->candy();
-echo "\n\n";
-#var_dump(Prototipo::$_public);
-echo "\n\n";
 var_dump($other->does());
-
-#$other->testA();
 
 ?></pre>

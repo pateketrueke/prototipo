@@ -24,9 +24,9 @@ class Prototipo {
 
 
   // constructor
-  public function __construct($arguments = array())
+  public function __construct()
   {
-    $this->set($arguments);
+    $this->set(func_get_args());
   }
 
   // dynamic calls
@@ -54,11 +54,11 @@ class Prototipo {
   // public method callback
   public static function __callStatic($method, $arguments = array())
   {
-    if ( ! isset(self::$_public[get_called_class()][$name]))
+    if ( ! isset(self::$_public[get_called_class()][$method]))
     {
-      trigger_error(sprintf('%s method `%s` unavailable', get_called_class(), $key), E_USER_ERROR);
+      trigger_error(sprintf('%s method `%s` unavailable', get_called_class(), $method), E_USER_ERROR);
     }
-    call_user_func_array(self::$_public[get_called_class()][$name], $arguments);
+    return call_user_func_array(self::$_public[get_called_class()][$method], $arguments);
   }
 
   // private method setter
@@ -77,6 +77,10 @@ class Prototipo {
     elseif (isset(self::$_public[get_called_class()][$key]))
     {
       $property = self::$_public[get_called_class()][$key];
+    }
+    elseif (isset(self::$_public[__CLASS__][$key]))
+    {
+      $property = self::$_public[__CLASS__][$key];
     }
     elseif (isset($this->$key))
     {
