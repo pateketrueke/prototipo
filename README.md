@@ -2,7 +2,7 @@ Prototipo
 =========
 
 The objective of this project is show how
-the prototypal concept of object oriented programation
+the prototypal concept of object oriented programming
 can work almost in the way Javascript does, but isn't perfect basically
 by the natural limitations of the PHP language.
 
